@@ -92,4 +92,51 @@ fmt.Println("Here")
 
 }
 
+func Login(c *fiber.Ctx) error {
+	user := &entity.User{}
 
+	err := c.BodyParser(user)
+
+	if err != nil {
+		return c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{
+			"msg": "Request failed",
+		})
+	}
+
+	exist, err := entity.GetUserByEmail(user.Email)
+
+	if err != nil {
+		return c.Status(http.StatusNotFound).JSON(&fiber.Map{
+			"error": true,
+			"msg": "User does mot exist",
+		})
+	}
+
+	comparePassword := utils.ComparePasswords(exist.Password, user.Password)
+
+	if !comparePassword {
+		return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
+			"error": true,
+			"msg": "Incorrect email or password",
+		})
+	}
+
+	// Generate a new pair of access and refresh tokens.
+	token, err := utils.GenerateNewTokens(exist.ID.String())
+
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(&fiber.Map{
+			"error": true,
+			"msg": err.Error(),
+		})
+	}
+
+	return c.JSON(&fiber.Map{
+		"error": false,
+		"msg": "Successfully logged in",
+		"tokens": &fiber.Map{
+			"accessToken": token.Access,
+			"refreshToken": token.Refresh,
+		},
+	})
+}
