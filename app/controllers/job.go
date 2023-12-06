@@ -79,4 +79,46 @@ func CreateJob(c *fiber.Ctx) error {
 
 }
 
+func GetAllJob(c *fiber.Ctx) error {
+	now := time.Now().Unix()
+
+	claims, err := utils.ExtractTokenMetadata(c)
+
+	if err != nil {
+		return c.Status(http.StatusUnauthorized).JSON(&fiber.Map{
+			"error": true,
+			"msg":   "Token is invalid or expired",
+		})
+	}
+
+	// Set expiration time from JWT data of current job.
+	expires := claims.Expires
+
+	// Return status 401 and unauthorized error message.
+	if now > expires {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": true,
+			"msg":   "You are unauthorized, please login",
+		})
+	}
+
+	createdBy := claims.UserID
+
+	jobs, err := entity.GetAllJob(createdBy)
+
+	if err != nil {
+		return c.Status(http.StatusNotFound).JSON(&fiber.Map{
+			"error":   true,
+			"message": "Could not get jobs",
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(&fiber.Map{
+		"error": false,
+		"msg":   "Successfully retrieved all jobs",
+		"data":  jobs,
+		"count": len(jobs),
+	})
+
+}
 
