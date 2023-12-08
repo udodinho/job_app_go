@@ -346,3 +346,9 @@ func DeleteJob(c *fiber.Ctx) error {
 	}
 	return c.SendStatus(fiber.StatusNoContent)
 }
+
+func HealthCheck(c *fiber.Ctx) error {
+	return c.Status(200).JSON(fiber.Map{
+		"msg": "OK",
+	})
+}
