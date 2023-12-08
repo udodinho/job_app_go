@@ -276,3 +276,73 @@ func UpdateJob(c *fiber.Ctx) error {
 		"data":  updatedJob,
 	})
 }
+
+func DeleteJob(c *fiber.Ctx) error {
+	now := time.Now().Unix()
+	claims, err := utils.ExtractTokenMetadata(c)
+
+	if err != nil {
+		return c.Status(http.StatusUnauthorized).JSON(&fiber.Map{
+			"error": true,
+			"msg":   "Token is invalid or expired",
+		})
+	}
+
+	// Set expiration time from JWT data of current book.
+	expires := claims.Expires
+
+	// Return status 401 and unauthorized error message.
+	if now > expires {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": true,
+			"msg":   "You are unauthorized, please login",
+		})
+	}
+
+	id, err := uuid.Parse(c.Params("id"))
+
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(&fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	createdBy := claims.UserID
+
+	uJob, _, err := entity.GetSingleJob(id, createdBy)
+
+	if err != nil {
+		return c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{
+			"error": true,
+			"msg":   "Could not fetch job",
+		})
+	}
+
+	if id == uJob.ID {
+		_, err := entity.DeleteJob(id, createdBy)
+
+		if err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(&fiber.Map{
+				"error": true,
+				"msg":   "Could not delete job",
+			})
+		} else {
+			return c.Status(http.StatusOK).JSON(&fiber.Map{
+				"error": false,
+				"msg":   "Successfully deleted job",
+				"data":  id,
+			})
+		}
+
+	} else {
+		if id != uJob.ID {
+			return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
+				"error":   true,
+				"message": "No job with the ID",
+				"data":    id,
+			})
+		}
+	}
+	return c.SendStatus(fiber.StatusNoContent)
+}
