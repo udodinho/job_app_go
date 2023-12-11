@@ -4,12 +4,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/udodinho/job-app/app/controllers"
 	"github.com/udodinho/job-app/pkg/middleware"
-
-	// "github.com/udodinho/job-app/application/controllers"
-
-	// "github.com/gofiber/fiber/v2/middleware/cors"
-	// "github.com/gofiber/fiber/v2/middleware/logger"
-	// "github.com/udodinho/job-app/app/controllers"
 	"gorm.io/gorm"
 )
 
@@ -22,7 +16,6 @@ func (s *Server) SetupRouter(app *fiber.App) {
 	api := app.Group("/api/v1")
 	// Health check route
 	api.Get("/healthcheck", controllers.HealthCheck)
-	// api.Post("/register", s.App.Register)
 
 	// Unauthenticated routes
 	api.Post("/auth/register", controllers.Register)
@@ -50,17 +43,3 @@ func (s *Server) NotFoundRoute(a *fiber.App) {
 		},
 	)
 }
-
-// SetupRouter set up the router for the server
-// func (s *Server) SetupRouter(app *fiber.App) {
-// 	fiberMode := os.Getenv("GIN_MODE")
-
-// 	if fiberMode == "test" {
-// 		log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
-// 		app := fiber.New()
-// 		s.defineRoutes(app)
-		
-// 	}
-
-// 	s.defineRoutes(app)
-// }
