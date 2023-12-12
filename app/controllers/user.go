@@ -8,8 +8,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"github.com/udodinho/job-app/domain/entity"
-
-	// "github.com/udodinho/job-app/infrastructure/repository"
 	"github.com/udodinho/job-app/pkg/utils"
 )
 
@@ -23,26 +21,7 @@ func Register(c *fiber.Ctx) error {
 			"msg": "Request failed",
 		})
 	}
-fmt.Println("Here")
-fmt.Println(user.Name)
-fmt.Println(user.Email)
-fmt.Println(user.Password)
-fmt.Println("Here")
-	// validate := utils.NewValidator()
 
-	// fmt.Println("Here0")
-	// if err := validate.Struct(user); err != nil {
-	// 	c.Status(http.StatusBadRequest).JSON(fiber.Map{
-
-	// 		"error": true,
-	// 		"msg":   utils.ValidatorErrors(err),
-	// 	})
-	// 	return err
-	// }
-	// fmt.Println("Here1")
-
-	fmt.Println("start")
-	// exist, err := app.Db.GetUserByEmail(user.Email)
 	exist, err := entity.GetUserByEmail(user.Email)
 
 	fmt.Println("ex", exist)
