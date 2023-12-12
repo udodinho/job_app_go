@@ -1,7 +1,6 @@
 package server
 
 import (
-	// "context"
 	"fmt"
 	"log"
 	"net/http"
@@ -23,11 +22,7 @@ func (s *Server) Start() {
 	idleConnsClosed := make(chan struct{})
 	
 	wait := make(chan os.Signal, 1)
-	// s.SetupRouter()
 
-	// r := Server{
-	// 	Db: configs.DB,
-	// }
 
 	server := fiber.New()
 
@@ -54,8 +49,7 @@ func (s *Server) Start() {
 
 	log.Printf("Shutting down the server...")
 	time.Sleep(time.Second)
-	// ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	// defer cancel()
+
 	// Gracefully shutdown the server when receiving the TERM or KILL signals.
 	if err := server.Shutdown(); err != nil {
 		log.Fatal("Shutting down forcefully", err)
