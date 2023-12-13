@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -136,8 +135,6 @@ func GetJob(c *fiber.Ctx) error {
 
 	// Set expiration time from JWT data of current job.
 	expires := claims.Expires
-	fmt.Println("now", now)
-	fmt.Println("expire", expires)
 
 	// Return status 401 and unauthorized error message.
 	if now > expires {
