@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -24,7 +23,7 @@ func Register(c *fiber.Ctx) error {
 
 	exist, err := entity.GetUserByEmail(user.Email)
 
-	fmt.Println("ex", exist)
+
 	if err != nil {
 		return c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{
 			"msg": "Failed to get user",
@@ -44,17 +43,15 @@ func Register(c *fiber.Ctx) error {
 	user.CreatedAt = time.Now()
 	user.Password = utils.GeneratePassword(user.Password)
 
-	fmt.Println("Here0")
+
 	if err := validate.Struct(user); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
 			"error": true,
 			"msg":   "Validation error",
 		})
 	}
-	fmt.Println("Here1")
+
 	newUser, err := user.CreateUser()
-	// newUser := app.Db.CreateUser(user)
-	fmt.Println("Here2")
 
 	if err != nil {
 		c.Status(http.StatusInternalServerError).JSON(&fiber.Map{
