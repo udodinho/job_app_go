@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	// "github.com/udodinho/job-app/infrastructure/repository"
 )
 
 type User struct {
