@@ -6,15 +6,10 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	// "github.com/udodinho/job-app/infrastructure/repository"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
-
-// type DB struct {
-// 	Db	*gorm.DB
-// }
 
 func MigrateDB(db *gorm.DB) error {
 	err := db.AutoMigrate(&User{}, &Job{}) 
@@ -53,12 +48,6 @@ func init() {
 	}
 
 	DB = db
-
-	// database := &DB{
-	// 	Db: db,
-	// }
-
-	// database.Db = db
 
 	fmt.Println("Database connected successfully")
 	
