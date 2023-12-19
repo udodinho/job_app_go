@@ -11,7 +11,7 @@ type User struct {
 	Name      string    `json:"name" validate:"required,lte=255"`
 	Email     string    `gorm:"unique" json:"email" validate:"required,lte=255"`
 	Password  string    `json:"password,omitempty" validate:"required,lte=255"`
-	Jobs      []Job     `]son:"jobs" gorm:"ForeignKey:CreatedBy"`
+	Jobs      []Job     `json:"jobs" gorm:"ForeignKey:CreatedBy"`
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }
