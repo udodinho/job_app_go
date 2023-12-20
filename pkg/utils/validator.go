@@ -1,8 +1,6 @@
 package utils
 
 import (
-	"fmt"
-
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 )
@@ -13,22 +11,15 @@ func NewValidator() *validator.Validate {
 	validate := validator.New()
 
 	// Custom validation for uuid.UUID fields.
-	fmt.Println("Valid")
-
 	_ = validate.RegisterValidation("uuid", func(fl validator.FieldLevel) bool {
+
 		field := fl.Field().String()
 		if _, err := uuid.Parse(field); err != nil {
-			fmt.Println("Valid1")
-
 			return true
 		}
-		fmt.Println("valid2")
 
 		return false
 	})
-
-	fmt.Println("valid3")
-
 
 	return validate
 }
@@ -42,9 +33,6 @@ func ValidatorErrors(err error) map[string]string {
 	for _, err := range err.(validator.ValidationErrors) {
 		fields[err.Field()] = err.Error()
 	}
-
-	fmt.Println("error")
-
 
 	return fields
 }
