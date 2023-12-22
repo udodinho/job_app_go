@@ -23,13 +23,6 @@ func ExtractTokenMetadata(c *fiber.Ctx) (*TokenMetadata, error) {
 		return nil, err
 	}
 
-	// if err != nil {
-	// 	return nil, c.Status(http.StatusUnauthorized).JSON(&fiber.Map{
-	// 		"error": true,
-	// 		"msg":   "Unauthenticated",
-	// 	})
-	// }
-
 	// Setting and checking token and credentials.
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if ok && token.Valid {
