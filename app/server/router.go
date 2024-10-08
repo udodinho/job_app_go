@@ -38,7 +38,7 @@ func (s *Server) NotFoundRoute(a *fiber.App) {
 			// Return HTTP 404 status and JSON response.
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 				"error": true,
-				"msg":   "Sorry, this route does is not exist",
+				"msg":   "Sorry, this route does not exist",
 			})
 		},
 	)
