@@ -60,7 +60,7 @@ func CreateJob(c *fiber.Ctx) error {
 		})
 	}
 
-	jb, err := job.CreateJob()
+	newJob, err := job.CreateJob()
 
 	if err != nil {
 		return c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{
@@ -73,7 +73,7 @@ func CreateJob(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(&fiber.Map{
 		"error": false,
 		"msg":   "Successfully created a job",
-		"data":  jb,
+		"data":  newJob,
 	})
 
 }
